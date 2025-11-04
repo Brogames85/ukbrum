@@ -42,9 +42,9 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
-mongo_url = os.environ['mongodb+srv://mahirhanda85:lHRRTv4lGWizCwZA@movecar.phgky.mongodb.net/?retryWrites=true&w=majority&appName=MoveCar']
+mongo_url = os.environ["MONGO_URL"]
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['move_car']]
+db = client[os.environ['DB_NAME']]
 
 # JWT Configuration
 JWT_SECRET = os.environ.get('JWT_SECRET', secrets.token_urlsafe(32))
