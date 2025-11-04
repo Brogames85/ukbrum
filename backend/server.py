@@ -16,48 +16,30 @@ import secrets
 import string
 import base64
 
+# ✅ load .env file
 ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
+load_dotenv(ROOT_DIR / ".env")
 
-# MongoDB connection
-mongo_url = os.environ['from fastapi import FastAPI, APIRouter, HTTPException, Depends, UploadFile, File, Form
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
-import os
-import logging
-from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List, Optional, Dict, Any
-import uuid
-from datetime import datetime, timezone, timedelta
-import bcrypt
-import jwt
-import secrets
-import string
-import base64
+# ✅ MongoDB connection
+mongo_url = os.environ.get("MONGO_URL")
+if not mongo_url:
+    raise Exception("MONGO_URL environment variable not set!")
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
-
-# MongoDB connection
-mongo_url = os.environ["MONGO_URL"]
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+db_name = os.environ.get("DB_NAME", "default_db")
+db = client[db_name]
 
-# JWT Configuration
-JWT_SECRET = os.environ.get('JWT_SECRET', secrets.token_urlsafe(32))
+# ✅ JWT Config
+JWT_SECRET = os.environ.get("JWT_SECRET", secrets.token_urlsafe(32))
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = 24
 
-# Security
+# ✅ Security
 security = HTTPBearer()
 
-# Create the main app
-app = FastAPI()
+# ✅ FastAPI app setup
+app = FastAPI(title="UKBRUM Backend", version="1.0.0")
 api_router = APIRouter(prefix="/api")
-
 # ==================== MODELS ====================
 
 class User(BaseModel):
